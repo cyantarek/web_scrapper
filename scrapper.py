@@ -1,14 +1,26 @@
 from bs4 import BeautifulSoup, url
+import csv
+import pandas
+
+filename = "products.csv"
+f = open(filename, "w", newline="")
+writer = csv.writer(f)
 
 page = url("https://www.newegg.com/Video-Cards-Video-Devices/Category/ID-38")
-soup = BeautifulSoup(page,'lxml')
+soup = BeautifulSoup(page, 'lxml')
 
-cards = soup.find_all("div", {"class":"item-container"})
+cards = soup.find_all("div", {"class": "item-container"})
+card_name = [name.text for name in soup.find_all("a", {"class": "item-title"})]
+card_brand = [name.text.split()[0] for name in soup.find_all("a", {"class": "item-title"})]
+shipping = [ship.text.strip() for ship in soup.find_all("li", {"class": "price-ship"})]
 
-for card in cards:
-    card_brand = card.div.div.a.img["title"]
-    card_name = card.find_all("a", {"class":"item-title"})[0].text
-    shipping = card.find_all("li", {"class":"price-ship"})[0].text.replace(" ", "").strip()
 
-    print(shipping)
+print(shipping)
 
+print(card_brand)
+card_details = pandas.DataFrame({
+    "Name": card_name,
+    "Brand": card_brand,
+    "Shipping": shipping
+})
+card_details.to_csv("output.csv")
