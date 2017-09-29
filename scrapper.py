@@ -1,10 +1,7 @@
 from bs4 import BeautifulSoup, url
 import csv
 import pandas
-
-filename = "products.csv"
-f = open(filename, "w", newline="")
-writer = csv.writer(f)
+import matplotlib.pyplot as plt
 
 page = url("https://www.newegg.com/Video-Cards-Video-Devices/Category/ID-38")
 soup = BeautifulSoup(page, 'lxml')
@@ -24,3 +21,6 @@ card_details = pandas.DataFrame({
     "Shipping": shipping
 })
 card_details.to_csv("output.csv")
+
+card_details.plot(kind="line")
+plt.show()
