@@ -21,10 +21,10 @@ card_details = pandas.DataFrame({
     "Shipping": shipping
 })
 card_details.to_csv("output.csv")
+card_details.to_csv("output.txt")
 
 # Connect to MySQL with SQLAlchemy and storing the data to the database
 conn = pymysql.connect(host="127.0.0.1", port=80, user="root", password="", db="test", charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
-engine = create_engine('mysql+pymysql://[root]:[]@[127.0.0.1]:[80]/[test]', echo=False)
+engine = create_engine('mysql+pymysql://[root]:[admin]@[127.0.0.1]:[80]/[test]', echo=False)
 card_details.to_sql(name="scrap_tb", con=engine, schema=None, if_exists='fail', index=True, index_label=None, chunksize=None, dtype=None)
-
 
